@@ -41,12 +41,12 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinColumn (name = "nationality_id")
-  //  @JsonIgnore
+   //@JsonIgnore
     private Country nationalityId;
 
     @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinColumn(name = "birth_place_id")
-   // @JsonIgnore
+  //  @JsonIgnore
     private Country birthPlaceId;
 
     @OneToMany(mappedBy = "user")

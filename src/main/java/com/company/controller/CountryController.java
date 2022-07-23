@@ -1,6 +1,7 @@
 package com.company.controller;
 
 
+import com.company.dto.CountryDto;
 import com.company.entity.Country;
 import com.company.service.inter.CountryServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,12 @@ public class CountryController {
     @GetMapping("/getById")
     public Country getById( @RequestParam  int id){
         return countryController.getById(id);
+    }
+
+
+    @GetMapping("/getByIdDto")
+    public CountryDto getByIdDto(@RequestParam  int id){
+        return countryController.getByIdDto(id);
     }
 
 

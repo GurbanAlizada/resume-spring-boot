@@ -1,5 +1,6 @@
 package com.company.service.inter;
 
+import com.company.dto.CountryDto;
 import com.company.entity.Country;
 import com.company.entity.User;
 import org.springframework.data.repository.query.Param;
@@ -12,5 +13,6 @@ public interface CountryServiceInter {
 
     Country getById(int id);
 
+     CountryDto getByIdDto(int id);
 
 }
