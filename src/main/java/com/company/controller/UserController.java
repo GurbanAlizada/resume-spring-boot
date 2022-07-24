@@ -6,6 +6,9 @@ import com.company.entity.Country;
 import com.company.entity.User;
 import com.company.service.inter.UserServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -38,16 +41,26 @@ public class UserController {
 
 
 
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<User>> pagination(@RequestParam("currentPage") int currentPage , @RequestParam("pageSize") int pageSize ){
+        return ResponseEntity.ok(userServiceInter.pagination(currentPage , pageSize));
+    }
 
 
+
+    //http://localhost:8080/users/pagination/v2?page=0&size=2
+    @GetMapping("/pagination/v2")
+    public ResponseEntity<Slice<User>> pagination2(Pageable pageable){
+        return ResponseEntity.ok(userServiceInter.pagination2(pageable));
+    }
 
 
 
 
     @GetMapping( "/findById")
-    public User findByUser(@RequestParam int id){
+    public ResponseEntity<User> findByUser(@RequestParam int id){
        User u  =  userServiceInter.getById(id);
-        return u;
+        return ResponseEntity.ok(u);
     }
     @GetMapping( "/findByIdDto")
     public UserDto findByUserDto(@RequestParam int id){
@@ -90,7 +103,7 @@ public class UserController {
         return user;
     }
     @PutMapping("/updateDto")
-    public UserDto updateDto(@RequestParam("id") Integer id , @RequestBody User user){
+    public ResponseEntity<UserDto> updateDto(@RequestParam("id") Integer id , @RequestBody User user){
         return userServiceInter.updateUserDto(id,user) ;
     }
 

@@ -39,12 +39,12 @@ public class User {
     @Temporal(TemporalType.DATE)
     private Date birthOfDate;
 
-    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JoinColumn (name = "nationality_id")
    //@JsonIgnore
     private Country nationalityId;
 
-    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JoinColumn(name = "birth_place_id")
   //  @JsonIgnore
     private Country birthPlaceId;

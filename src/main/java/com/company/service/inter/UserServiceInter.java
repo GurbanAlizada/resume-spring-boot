@@ -3,6 +3,10 @@ package com.company.service.inter;
 
 import com.company.dto.UserDto;
 import com.company.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,12 +20,12 @@ public interface UserServiceInter {
 
     User getByEmailAndPassword(String email , String password) ;
 
-    User getById(int userId);
+    User getById(Integer userId);
 
      UserDto getByIdDto(int userId);
 
    boolean updateUser( Integer id ,User u);
-    UserDto updateUserDto( Integer id ,User u);
+    ResponseEntity<UserDto> updateUserDto( Integer id ,User u);
 
     boolean removeUser(int id);
 
@@ -43,5 +47,10 @@ public interface UserServiceInter {
 
 
     User save(User user);
+
+
+    Page<User> pagination(int currentPage , int pageSize );
+
+    Slice<User> pagination2(Pageable pageable);
 
 }

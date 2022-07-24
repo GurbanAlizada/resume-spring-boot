@@ -4,12 +4,21 @@ import com.company.dao.impl.UserRepository;
 import com.company.dto.UserDto;
 import com.company.dto.converters.UserDtoConvertor;
 import com.company.entity.User;
+import com.company.exception.UserNotFoundException;
 import com.company.service.inter.UserServiceInter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.transaction.RollbackException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -47,8 +56,8 @@ public class UserServiceImpl implements UserServiceInter {
 
 
     @Override
-    public User getById(int userId) {
-        User user = daoInter.findById(userId);
+    public User getById(Integer userId) {
+        User user =  daoInter.findById(userId).orElseThrow(()->new UserNotFoundException("User bulunamadi id: "+userId));
         return  user;
     }
     @Override
@@ -97,26 +106,28 @@ public class UserServiceImpl implements UserServiceInter {
         //    user.setBirthPlaceId(u.getBirthPlaceId());
          //   user.setNationalityId(u.getNationalityId());
             daoInter.updateUser(user);
+            return true;
         }
-        return false;
+        throw new IllegalArgumentException("Kullanici bulunamadi");
     }
     @Override
-    public UserDto updateUserDto(Integer id, User u) {
-        User user = daoInter.getById(id);
-        if(user != null){
-            user.setName(u.getName());
-            user.setSurname(u.getSurname());
-            user.setEmail(u.getEmail());
-            user.setPassword(u.getPassword());
+    public ResponseEntity<UserDto> updateUserDto(Integer id, User u) {
+        //User user = daoInter.getById(id);
+        Optional<User> user = daoInter.findById(id);
+        if(user.isPresent()){
+            user.get().setName(u.getName());
+            user.get().setSurname(u.getSurname());
+            user.get().setEmail(u.getEmail());
+            user.get().setPassword(u.getPassword());
             //  user.setBirthOfDate(u.getBirthOfDate());
-            user.setPhone(u.getPhone());
+            user.get().setPhone(u.getPhone());
             //    user.setBirthPlaceId(u.getBirthPlaceId());
             //   user.setNationalityId(u.getNationalityId());
-            daoInter.updateUser(user);
-            UserDto dto = modelMapper.map(user , UserDto.class );
-            return dto;
+            daoInter.updateUser(user.get());
+            UserDto dto = modelMapper.map(user.get() , UserDto.class );
+            return ResponseEntity.ok(dto);
         }
-        return null;
+        throw new UserNotFoundException("Kullanici bulunamadi");
     }
 
 
@@ -129,8 +140,16 @@ public class UserServiceImpl implements UserServiceInter {
         return daoInter.save(user);
     }
 
+    @Override
+    public Page<User> pagination(int currentPage, int pageSize) {
+        Pageable pageable = PageRequest.of(currentPage-1, pageSize);
+        return daoInter.findAll(pageable);
+    }
 
-
+    @Override
+    public Slice<User> pagination2(Pageable pageable) {
+        return daoInter.findAll(pageable);
+    }
 
 
     @Override
