@@ -1,18 +1,24 @@
 package com.company.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
+@Builder
 @Entity
-public class EmploymentHistory {
+@JsonIgnoreProperties({
+        "hibernateLazyInitializer" ,
+        "handler"
+})
+public class EmploymentHistory implements Serializable {
 
 
     @Id
@@ -37,15 +43,5 @@ public class EmploymentHistory {
     private User user;
 
 
-    @Override
-    public String toString() {
-        return "EmploymentHistory{" +
-                "id=" + id +
-                ", header='" + header + '\'' +
-            //    ", beginDate=" + beginDate +
-             //   ", endDate=" + endDate +
-                ", jobDescription='" + jobDescription + '\'' +
-      //        ", user=" + user +
-                '}';
-    }
+
 }

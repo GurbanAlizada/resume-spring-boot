@@ -1,8 +1,6 @@
 package com.company.dao.impl;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.company.entity.User;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,42 +39,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
             }
          List<User> users = typedQuery.getResultList();
         return users;
-    }
-
-
-
-
-    @Override
-    public boolean updateUser(User u) {
-          u.setPassword(cryp.hashToString(4,  u.getPassword().toCharArray()));
-            entityManager.merge(u);
-        return true;
-    }
-
-
-    @Override
-    public boolean removeUser(int id) {
-            User u = entityManager.find(User.class, id);
-            entityManager.remove(u);
-        return true;
-    }
-
-
-    private BCrypt.Hasher cryp = BCrypt.withDefaults();
-    @Override
-    public boolean addUser(User u) {
-     //   u.setPassword(cryp.hashToString(4,  u.getPassword().toCharArray()));
-        entityManager.persist(u);
-        return false;
-    }
-
-
-    public List<User> foo(String name){
-        String jpql = "select u from User u left join fetch u.nationalityId where u.nationalityId.name = :name";
-        TypedQuery<User> typedQuery =  entityManager.createQuery(jpql , User.class);
-        typedQuery.setParameter("name" , name);
-        List<User> u = typedQuery.getResultList();
-        return u;
     }
 
 

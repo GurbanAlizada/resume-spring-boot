@@ -10,9 +10,9 @@ public class UserDtoConvertor {
 
     public UserDto convertToUserDto(User user){
        return new UserDto(
+               user.getId(),
                user.getName(),
-               user.getEmail(),
-               user.getPassword());
+               user.getEmail());
     }
 
 }

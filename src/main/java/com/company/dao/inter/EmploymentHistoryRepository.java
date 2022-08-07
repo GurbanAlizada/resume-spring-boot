@@ -12,5 +12,6 @@ public interface EmploymentHistoryRepository extends JpaRepository<EmploymentHis
     @Query("select e from EmploymentHistory e  where e.user.id = :id")
     List<EmploymentHistory> getEmploymentHistoryByUser(Integer id);
 
+    List<EmploymentHistory> getByUser_Id(int userId);
 
 }

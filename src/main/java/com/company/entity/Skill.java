@@ -23,11 +23,5 @@ public class Skill {
     @JsonIgnore
     private List<UserSkill> userSkillList;
 
-    @Override
-    public String toString() {
-        return "Skill{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
+
 }

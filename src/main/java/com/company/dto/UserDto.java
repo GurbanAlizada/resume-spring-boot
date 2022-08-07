@@ -1,6 +1,5 @@
 package com.company.dto;
 
-import com.company.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDto {
 
-    String name;
-    String email;
-    String password;
+   private int id;
+   private String name;
+   private String email;
+
 }

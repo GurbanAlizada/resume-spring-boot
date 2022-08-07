@@ -1,135 +1,93 @@
 package com.company.controller;
 
-import com.company.dao.impl.UserRepository;
-import com.company.dto.UserDto;
-import com.company.entity.Country;
+
+import com.company.dto.request.UserRequest;
+import com.company.dto.result.ResponseDto;
 import com.company.entity.User;
 import com.company.service.inter.UserServiceInter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/v1/api")
 public class UserController {
 
-    UserServiceInter userServiceInter;
+    private final UserServiceInter userServiceInter;
 
-    @Autowired
     public UserController(UserServiceInter userServiceInter) {
         this.userServiceInter = userServiceInter;
     }
 
-
-
-
-    @GetMapping("/getAllUser")
-    public ResponseEntity<List<User>> getAllUser(){
-        List<User> users = userServiceInter.getAllInfo();
-        return  ResponseEntity.ok(users);
-    }
-    @GetMapping("/getAllUserDto")
-    public ResponseEntity<List<UserDto>> getAllUserDto(){
-        List<UserDto> users = userServiceInter.getAllInfoDto();
-        return  ResponseEntity.ok(users);
-    }
-
-
-
-    @GetMapping("/pagination")
-    public ResponseEntity<Page<User>> pagination(@RequestParam("currentPage") int currentPage , @RequestParam("pageSize") int pageSize ){
-        return ResponseEntity.ok(userServiceInter.pagination(currentPage , pageSize));
-    }
-
-
-
-    //http://localhost:8080/users/pagination/v2?page=0&size=2
-    @GetMapping("/pagination/v2")
-    public ResponseEntity<Slice<User>> pagination2(Pageable pageable){
-        return ResponseEntity.ok(userServiceInter.pagination2(pageable));
-    }
-
-
-
-
-    @GetMapping( "/findById")
-    public ResponseEntity<User> findByUser(@RequestParam int id){
-       User u  =  userServiceInter.getById(id);
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> findByUser(@PathVariable("id") int id) {
+        User u = userServiceInter.getById(id);
         return ResponseEntity.ok(u);
     }
-    @GetMapping( "/findByIdDto")
-    public UserDto findByUserDto(@RequestParam int id){
-        return userServiceInter.getByIdDto(id);
-    }
-    @GetMapping( "/findByIdWithPathVariable/{id}")
-    public User findByUser2(@PathVariable("id") int id){
-        User u  =  userServiceInter.getById(id);
-        return u;
+
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAll(){
+        return ResponseEntity.ok(userServiceInter.getAllUser());
     }
 
 
-
-
-
-    @GetMapping( "/findByNameAndSurname")
-    public List<User> findByNameAndSurname(@RequestParam("name") String name ,
-                                           @RequestParam("surname")   String surname){
-        List<User> u  =  userServiceInter.getUsersWithParams(name , surname);
-        return u;
-    }
-    @GetMapping( "/findByName")
-    public List<User> findByName(@RequestParam("name") String name ){
-        List<User> u  =  userServiceInter.findByName(name);
-        return u;
-    }
-    @GetMapping("/getNat")
-    public List<User> getNat(@RequestParam("name") String name){
-        return userServiceInter.getUserByNationality(name);
+    @GetMapping("/users/{name}")
+    public ResponseEntity<List<User>> findByName(@PathVariable("name") String name) {
+        List<User> u = userServiceInter.findByName(name);
+        return ResponseEntity.ok(u);
     }
 
 
-
-
-
-
-    @PutMapping("/update")
-    public User update(@RequestParam("id") Integer id , @RequestBody User user){
-        userServiceInter.updateUser(id, user);
-        return user;
+    @GetMapping("/findByNameAndSurname")
+    public ResponseEntity<List<User>> findByNameAndSurname(
+                                           @RequestParam("name") String name,
+                                           @RequestParam("surname") String surname) {
+        List<User> u = userServiceInter.getUsersWithParams(name, surname);
+        return ResponseEntity.ok(u);
     }
-    @PutMapping("/updateDto")
-    public ResponseEntity<UserDto> updateDto(@RequestParam("id") Integer id , @RequestBody User user){
-        return userServiceInter.updateUserDto(id,user) ;
+
+
+    @GetMapping("/getByEmailAndPassword")
+    public ResponseEntity<User> getByEmailAndPassword(
+            @RequestParam("email") String email ,
+            @RequestParam("password") String password) {
+        return ResponseEntity.ok(userServiceInter.getByEmailAndPassword(email, password));
     }
 
 
 
-
-
-    @PostMapping("/save")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        userServiceInter.addUser(user);
-        return  ResponseEntity.ok(user);
-    }
-    @PostMapping("/saveDto")
-    public ResponseEntity<UserDto> addUserDto(@RequestBody User user) {
-      return ResponseEntity.ok(userServiceInter.addUserDto(user));
+    @GetMapping("/getUserByNationality")
+    public ResponseEntity<List<User>> getUserByNationality(@RequestParam("name") String name) {
+        return ResponseEntity.ok(userServiceInter.getUserByNationality(name));
     }
 
 
 
-
-
-
-
-
-    @GetMapping("/hello")
-    public String hello(){
-        return "Hello";
+    @PostMapping("/users")
+    public ResponseEntity<ResponseDto> addUser( @Valid @RequestBody UserRequest userRequest){
+        return ResponseEntity.ok(ResponseDto.of(userServiceInter.addUser(userRequest) , "Basari ile eklendi"));
     }
+
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<ResponseDto> update(
+            @PathVariable("id") Integer id,
+            @RequestBody UserRequest userRequest) {
+
+        return   ResponseEntity.ok(ResponseDto.of(userServiceInter.updateUser(id, userRequest) ,"Barari ile guncellendu"));
+    }
+
+
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<ResponseDto> delete(@PathVariable("id") int id){
+        return ResponseEntity.ok(ResponseDto.of(userServiceInter.removeUser(id), "Kullanici basari ile silindi"));
+    }
+
+
+
 }

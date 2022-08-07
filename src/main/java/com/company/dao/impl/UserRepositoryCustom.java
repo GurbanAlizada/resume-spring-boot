@@ -12,13 +12,5 @@ public interface UserRepositoryCustom {
 
     List<User> getUsersWithParams(String name , String surname );
 
-   boolean updateUser(User u);
-
-    boolean removeUser(int id);
-
-    boolean addUser(User u);
-
-
-    public List<User> foo(String name);
 
 }

@@ -1,19 +1,25 @@
 package com.company.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
+@Builder
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Country {
+@JsonIgnoreProperties({
+        "hibernateLazyInitializer" ,
+        "handler" ,
+        "users1",
+        "users2"
+})
+public class Country implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,22 +34,11 @@ public class Country {
 
 
     @OneToMany(mappedBy = "nationalityId")
-    @JsonIgnore
     private List<User> users1;
 
     @OneToMany(mappedBy = "birthPlaceId")
-    @JsonIgnore
     private List<User> users2;
 
-
-    @Override
-    public String toString() {
-        return "Country{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", nationalityId='" + nationality + '\'' +
-                '}';
-    }
 
 
 }

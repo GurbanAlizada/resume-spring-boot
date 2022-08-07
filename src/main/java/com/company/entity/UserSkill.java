@@ -18,7 +18,7 @@ public class UserSkill {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User user ;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,16 +27,6 @@ public class UserSkill {
 
     @Column(name = "power")
     private int power;
-
-    @Override
-    public String toString() {
-        return "UserSkill{" +
-                "id=" + id +
-                ", user=" + user +
-                ", skill=" + skill +
-                ", power=" + power +
-                '}';
-    }
 
 
 }
