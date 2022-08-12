@@ -42,10 +42,23 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
+    @ExceptionHandler(EmploymentHistoryNotFoundException.class)
+    public final ResponseEntity<?> employmentHistoryNotFoundException(EmploymentHistoryNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+
     @ExceptionHandler(CountryNotFoundException.class)
     public final ResponseEntity<?> countryNotFoundException(CountryNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+
+    @ExceptionHandler(SkillNotFoundException.class)
+    public final ResponseEntity<?> skillNotFoundException(SkillNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
 
 
     @ExceptionHandler(Exception.class)

@@ -1,6 +1,5 @@
 package com.company.service.impl;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.company.dao.impl.UserRepository;
 import com.company.dao.inter.CountryRepository;
 import com.company.dto.request.UserRequest;
@@ -15,8 +14,6 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserServiceInter {
 
-
-    private BCrypt.Hasher cryp = BCrypt.withDefaults();
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
 
@@ -75,7 +72,7 @@ public class UserServiceImpl implements UserServiceInter {
                 .name(request.getName())
                 .surname(request.getSurname())
                 .email(request.getEmail())
-                .password(cryp.hashToString(4,request.getPassword().toCharArray()))
+                .password(request.getPassword())
                 .phone(request.getPhone())
                 .birthOfDate(request.getBirthOfDate())
                 .nationalityId(countryRepository.getById(request.getNationalityId()))
@@ -98,7 +95,7 @@ public class UserServiceImpl implements UserServiceInter {
            user.setName(userRequest.getName());
            user.setSurname(userRequest.getSurname());
            user.setEmail(userRequest.getEmail());
-           user.setPassword(cryp.hashToString(4,userRequest.getPassword().toCharArray()));
+           user.setPassword(userRequest.getPassword());
            user.setPhone(userRequest.getPhone());
            user.setBirthOfDate(userRequest.getBirthOfDate());
            user.setNationalityId(countryRepository.getById(userRequest.getNationalityId()));

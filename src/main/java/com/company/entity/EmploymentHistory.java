@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 
 
 @Data
@@ -30,10 +31,10 @@ public class EmploymentHistory implements Serializable {
     private String header;
 
     @Column(name  = "begin_date")
-    private Date beginDate;
+    private LocalDate beginDate;
 
     @Column(name  = "end_date")
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column(name  = "job_description")
     private String jobDescription;
