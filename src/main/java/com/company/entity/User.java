@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -47,8 +48,7 @@ public class User implements Serializable {
     private String phone;
 
     @Column(name = "date_of_date")
-    @Temporal(TemporalType.DATE)
-    private Date birthOfDate;
+    private LocalDate birthOfDate;
 
     @ManyToOne
     @JoinColumn (name = "nationality_id")
